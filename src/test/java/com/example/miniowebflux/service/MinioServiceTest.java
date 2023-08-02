@@ -39,7 +39,7 @@ class MinioServiceTest {
         StepVerifier.create(
                 minioService
                     .isBucketExist(bucket)
-                    .filter(Boolean.TRUE::equals) // if bucket exists Mono will be empty
+                    .filter(Boolean.TRUE::equals) // if bucket doesn't exist Mono will be empty
                     .switchIfEmpty(minioService.createBucket(bucket).thenReturn(true))
                     .then(minioService.uploadObject(bucket, object, resourceFilePath))
                     .log()
@@ -73,7 +73,6 @@ class MinioServiceTest {
         StepVerifier.create(
                 minioService
                     .isBucketExist(bucket)
-                    .log()
                     .flatMap(exist -> {
                         if (Boolean.FALSE.equals(exist)) {
                             return minioService.createBucket(bucket);
